@@ -1,0 +1,24 @@
+{
+  "name": "WebGroundStation",
+  "version": "1.0.0",
+  "description": "Drone Ground Service using Websockets to communicate directly with drone or by nodeJS proxy.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/oeelvik/WebGS.git"
+  },
+  "author": "Oystein Schroder Elvik",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/oeelvik/WebGS/issues"
+  },
+  "homepage": "https://github.com/oeelvik/WebGS",
+  "dependencies": {
+    "express": "4.10.2",
+    "socket.io": "1.1.0",
+    "serialport": "1.4.6"
+  }
+}
