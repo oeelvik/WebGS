@@ -8,7 +8,8 @@ angular.module('instrument.attitude-indicator',['socket'])
 		templateUrl: 'tpl/attitudeIndicator.tpl.html',
 		link: function(scope, element, attrs){
 			scope.context = element[0].getContext("2d");
-			scope.context.translate(150, 150);
+
+			scope.context.translate(150, 140);
 
 			scope.update(0, 0);
 		},
@@ -110,39 +111,96 @@ angular.module('instrument.attitude-indicator',['socket'])
 
 
 
+			$scope.compassBackgroundImage = document.createElement('canvas');
+			$scope.compassBackgroundImage.width = 200;
+			$scope.compassBackgroundImage.height = 20;
+			$scope.compassBackgroundImage.context = $scope.compassBackgroundImage.getContext("2d");
+
+			var gradient = $scope.compassBackgroundImage.context.createLinearGradient(0,0,200,0);
+			gradient.addColorStop(0, "#333");
+			gradient.addColorStop(.5, "#111");
+			gradient.addColorStop(1, "#333");
+			$scope.compassBackgroundImage.context.fillStyle = gradient;
+			$scope.compassBackgroundImage.context.fillRect(0,0,200,20);
+
+			$scope.compassNumbersImage = document.createElement('canvas');
+			$scope.compassNumbersImage.width = 2100;
+			$scope.compassNumbersImage.height = 20;
+			$scope.compassNumbersImage.context = $scope.compassNumbersImage.getContext("2d");
+
+
+			$scope.compassNumbersImage.context.strokeStyle = "#fff";
+			$scope.compassNumbersImage.context.fillStyle = "#fff";
+			$scope.compassNumbersImage.context.textAlign = "center";
+			$scope.compassNumbersImage.context.textBaseline = "middle";
+			$scope.compassNumbersImage.context.font = "12px monoscript";
+			$scope.compassNumbersImage.context.beginPath();
+			for(var i = 10; i < 420; i += 10){
+				var text = i - 30;
+				if(text < 0 ) text = text + 360;
+				if(text > 360 ) text = text - 360;
+				if(text == 0 || text == 360) text = 'N';
+				else if(text == 90) text = 'E';
+				else if(text == 180) text = 'S';
+				else if(text == 270) text = 'W';
+
+				$scope.compassNumbersImage.context.moveTo((i - 5) * 5, 20);
+				$scope.compassNumbersImage.context.lineTo((i - 5) * 5, 15);
+				$scope.compassNumbersImage.context.moveTo(i * 5, 20);
+				$scope.compassNumbersImage.context.lineTo(i * 5, 10);
+				$scope.compassNumbersImage.context.fillText(text, i * 5, 5);
+			}
+			$scope.compassNumbersImage.context.closePath();
+			$scope.compassNumbersImage.context.stroke();
+
+
+			//Instrument frame
 			$scope.frameImage = document.createElement('canvas');
 			$scope.frameImage.width = 300;
-			$scope.frameImage.height = 300;
+			$scope.frameImage.height = 400;
 			$scope.frameImage.context = $scope.frameImage.getContext("2d");
 
 			$scope.frameImage.context.fillStyle = "#000";
-			$scope.frameImage.context.fillRect(0,0,300,300);
+			$scope.frameImage.context.fillRect(0,0,300,400);
 
+			//Mask for compass and attitude
 			$scope.frameImage.context.globalCompositeOperation = 'xor';
 			$scope.frameImage.context.beginPath();
 			$scope.frameImage.context.arc(150, 150, 125, 0, 2 * Math.PI);
 			$scope.frameImage.context.closePath();
 			$scope.frameImage.context.fill();
+			$scope.frameImage.context.fillRect(50,280,200,20);
 			$scope.frameImage.context.globalCompositeOperation = 'source-over';
 
+			//Draw yellow indicators
 			$scope.frameImage.context.strokeStyle = "yellow";
 			$scope.frameImage.context.lineWidth = 3;
-
 			$scope.frameImage.context.beginPath();
+
+			//Roll Indicator
 			$scope.frameImage.context.moveTo(150, 52);
 			$scope.frameImage.context.lineTo(145, 65);
 			$scope.frameImage.context.lineTo(155, 65);
 			$scope.frameImage.context.lineTo(150, 52);
 
+			//Center indicator
 			$scope.frameImage.context.moveTo(134, 157);
 			$scope.frameImage.context.lineTo(134, 150);
 			$scope.frameImage.context.lineTo(100, 150);
 			$scope.frameImage.context.moveTo(165, 157);
 			$scope.frameImage.context.lineTo(165, 150);
 			$scope.frameImage.context.lineTo(200, 150);
-			
 			$scope.frameImage.context.moveTo(148.5, 150);
 			$scope.frameImage.context.lineTo(151.5, 150);
+			$scope.frameImage.context.stroke();
+
+
+			//Compass indicator
+			$scope.frameImage.context.beginPath();
+			$scope.frameImage.context.moveTo(148, 300);
+			$scope.frameImage.context.lineTo(152, 300);
+			$scope.frameImage.context.lineTo(150, 297);
+			$scope.frameImage.context.closePath();
 			$scope.frameImage.context.stroke();
 
 			/**
@@ -170,6 +228,7 @@ angular.module('instrument.attitude-indicator',['socket'])
 					yaw = yaw + (Math.PI * 2);
 				}
 
+
 				$scope.context.rotate(roll);
 
 				//Show center using nick
@@ -182,11 +241,12 @@ angular.module('instrument.attitude-indicator',['socket'])
 
 				$scope.context.drawImage($scope.ringImage, -150, -150);
 
-
 				$scope.context.rotate(-roll);
+
+				$scope.context.drawImage($scope.compassBackgroundImage, -100, 130);
+				$scope.context.drawImage($scope.compassNumbersImage, -150 - (yaw / (Math.PI / 2) * 450), 130);
+
 				$scope.context.drawImage($scope.frameImage, -150, -150);
-
-
 			}
 
 			Socket.on('data', function(data){
