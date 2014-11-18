@@ -1,0 +1,49 @@
+body {
+	padding-top: 15px;
+}
+
+canvas {
+	border: 1px solid #000;
+}
+
+.console div.message.info .glyphicon {
+	color: #5bc0de;
+}
+
+.console div.message.warn .glyphicon {
+	color: #f0ad4e;
+}
+
+.console div.message.error {
+	color: #d9534f;
+}
+
+.tabset-toolbar {
+	float: right;
+}
+
+ul.nav-tabs {
+	padding-left: 5px;
+	border-bottom: 0px;
+}
+
+.tab-pane {
+	padding: 15px;
+	margin-bottom: 15px;
+	background-color: #fff;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	-webkit-box-shadow: 0 1px 1px rgba(0,0,0,.05);
+	box-shadow: 0 1px 1px rgba(0,0,0,.05);
+}
+
+table label.inline {
+	width: 100%;
+	text-align: right;
+	padding-right: 15px;
+}
+
+#drone-config-i-o input {
+	max-width: 70px;
+}
+

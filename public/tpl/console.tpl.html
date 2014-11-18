@@ -1,0 +1,9 @@
+<div class="console">
+	<div ng-repeat="message in service.messages" class="message {{message.type}}">
+		<span class="glyphicon" ng-show="message.type != 'log'" ng-class="{
+			'glyphicon glyphicon-info-sign': message.type == 'info', 
+			'glyphicon-warning-sign': message.type == 'warn', 
+			'glyphicon-exclamation-sign': message.type == 'error' }"></span>
+		{{message.message}}
+	</div>
+</div>
