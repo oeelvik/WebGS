@@ -1,4 +1,4 @@
-angular.module('instrument.attitude-indicator',[])
+angular.module('instrument.attitude-indicator',['socket'])
 
 .directive('attitudeIndicator', function(){
 	return {
@@ -12,7 +12,7 @@ angular.module('instrument.attitude-indicator',[])
 
 			scope.update(0, 0);
 		},
-		controller: function($scope){
+		controller: function($scope, Socket){
 
 			$scope.centerImage = document.createElement('canvas');
 			$scope.centerImage.width = 300;
@@ -149,16 +149,25 @@ angular.module('instrument.attitude-indicator',[])
 			 * roll = roll in radians
 			 * nick = nick in radians
 			 */
-			$scope.update = function(roll, nick){
+			$scope.update = function(roll, nick, yaw){
+				$scope.roll = roll || $scope.roll;
+				$scope.nick = nick || $scope.nick;
+				$scope.yaw = yaw || $scope.yaw;
+
 				//Sett nick and roll in the range of 0 -> 2*PI
+				roll = roll % (Math.PI * 2);
+				if(roll < 0) {
+					roll = roll + (Math.PI * 2);
+				}
+
 				nick = nick % (Math.PI * 2);
 				if(nick < 0) {
 					nick = nick + (Math.PI * 2);
 				}
 
-				roll = roll % (Math.PI * 2);
-				if(roll < 0) {
-					roll = roll + (Math.PI * 2);
+				yaw = yaw % (Math.PI * 2);
+				if(yaw < 0) {
+					yaw = yaw + (Math.PI * 2);
 				}
 
 				$scope.context.rotate(roll);
@@ -179,6 +188,13 @@ angular.module('instrument.attitude-indicator',[])
 
 
 			}
+
+			Socket.on('data', function(data){
+				console.log(data);
+				if(data.attitude) {
+					$scope.update(data.attitude.roll, data.attitude.nick, data.attitude.yaw)
+				}
+			});
 
 		}
 	}

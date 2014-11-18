@@ -26,6 +26,36 @@ io.sockets.on("connection", function(socket){
 			console.log(ports);
 			socket.emit("serialPorts", []);//ports);
 		});
+
+		/**
+		 *	TODO: remove! Sending dummy data
+		 */
+		var data = {attitude: {roll:0,nick:0,yaw:0}};
+		var sendData = function(i){
+			setTimeout(function(){
+				if(i<361){
+					data.attitude.roll = i / 180 * Math.PI;
+				} else if(i < 721) {
+					data.attitude.nick = (i - 360) / 180 * Math.PI;
+				} else if(i < 1081) {
+					data.attitude.yaw = (i - 720) / 180 * Math.PI;
+				}
+
+				socket.emit("data", data);
+
+				if(i >=1080) {
+					i = 0;
+				}
+
+				if(i % 360 == 0)
+						setTimeout(function(){sendData(i+1)}, 1000);
+					else
+						sendData(i+1)
+			}, 10);
+		}
+
+		setTimeout(function(){sendData(0)}, 1000);
+
 	});
 
 	var serialConnect = function(portName, baudRate){
@@ -40,7 +70,7 @@ io.sockets.on("connection", function(socket){
 			// for debugging, you should see this in the terminal window:
 			console.log(data);
 			// send a serial event to the web client with the data:*/
-			socket.emit('serialRead', data);
+			socket.emit('data', data);
 		});
 	}
 
@@ -110,6 +140,9 @@ io.sockets.on("connection", function(socket){
 			serial = null;
 		}
 	}
+
+
+
 
 });
 
