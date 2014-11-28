@@ -24,6 +24,15 @@ angular.module('drone.config',['socket'])
 	return conf;
 })
 
+.directive('configMain', function(){
+	return {
+		restrict: "E",
+		replace: true,
+		templateUrl: 'tpl/configMain.tpl.html',
+		controller: 'ConfigCtrl'
+	}
+})
+
 .directive('configIo', function(){
 	return {
 		restrict: "E",
