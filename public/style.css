@@ -53,8 +53,8 @@ pid-chart {
 	height: 300px;
 }
 
-receiver {
-	display: block;
+.instrument {
+	display: inline-block;
 	width: 300px;
 	height: 300px;
 }

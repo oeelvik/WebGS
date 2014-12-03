@@ -17,7 +17,7 @@
 	<body>
 		<div class="container-fluid" ng-app="webGS">
 			<div class="row">
-				<div class="col-md-4">
+				<div class="col-md-5">
 
 					<div class="tabset-toolbar" ng-controller="ConfigCtrl">
 						<button ng-click="config.submit()" class="btn btn-success" ng-show="!config.isUnchanged()">Submitt</button>
@@ -25,18 +25,19 @@
 
 					<tabset>
 						<tab heading="Instruments">
-							<graph-tricopter></graph-tricopter>
-							<attitude-indicator></attitude-indicator>
-							<receiver></receiver>
+							<graph-tricopter class="instrument"></graph-tricopter>
+							<attitude-indicator class="instrument"></attitude-indicator>
+							<receiver class="instrument"></receiver>
 						</tab>
 
 						<tab heading="Conf">
 							<config-main></config-main>
 						</tab>
 
+						<!-- Deprecated:
 						<tab heading="IO">
 							<config-io></config-io>
-						</tab>
+						</tab>-->
 
 						<tab heading="PID">
 							<config-pid></config-pid>
@@ -57,7 +58,7 @@
 					</tabset>
 
 				</div>
-				<div class="col-md-8">
+				<div class="col-md-7">
 					<pid-chart direction="roll"></pid-chart>
 					<pid-chart direction="nick"></pid-chart>
 					<pid-chart direction="yaw"></pid-chart>
