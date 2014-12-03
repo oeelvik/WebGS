@@ -1,42 +1,55 @@
-<div class="form-horizontal">
+<div id="drone-config-main">
 	
-	<div class="form-group">
-		<label class="inline" for="config-data-enablemotors" class="col-sm-2 control-label">Enable Motors</label>
-			
-    	<div class="col-sm-2">
-    		<input type="checkbox" class="form-control" id="config-data-enablemotors" ng-model="config.data.enablemotors">
-    	</div>
-	</div>
 
-	<div class="form-group">
-		<label class="inline" for="config-data-enablepid" class="col-sm-2 control-label">Enable PID</label>
-			
-    	<div class="col-sm-2">
-    		<input type="checkbox" class="form-control" id="config-data-enablepid" ng-model="config.data.enablepid">
-    	</div>
-	</div>
+	<table>
 
-	<div class="form-group">
-		<label class="inline" for="config-data-happykillmore" class="col-sm-2 control-label">Happy Killmore</label>
-			
-    	<div class="col-sm-2">
-    		<input type="checkbox" class="form-control" id="config-data-happykillmore" ng-model="config.data.happykillmore">
-    	</div>
-	</div>
+		<tbody>
 
-	<div class="form-group">
-		<label class="inline" for="config-data-trigui" class="col-sm-2 control-label">TriGUI</label>
-			
-    	<div class="col-sm-2">
-    		<input type="checkbox" class="form-control" id="config-data-trigui" ng-model="config.data.trigui">
-		</div>
-</div>
+			<tr>
+				<td>
+					<label class="inline" for="config-data-happykillmore">Happy Killmore</label>
+				</td>
+				<td>
+					<input type="checkbox" class="form-control" id="config-data-happykillmore" ng-model="config.data.happykillmore">
+		    	</td>
+	    	</tr>
 
-	<div class="form-group">
-		<label class="inline" for="config-data-webgs" class="col-sm-2 control-label">WebGS</label>
-			
-    	<div class="col-sm-2">
-    		<input type="checkbox" class="form-control" id="config-data-webgs" ng-model="config.data.webgs">
-		</div>
-</div>
+			<tr>
+				<td>
+					<label class="inline" for="config-data-trigui">TriGUI</label>
+				</td>
+				<td>
+		    		<input type="checkbox" class="form-control" id="config-data-trigui" ng-model="config.data.trigui">
+				</td>
+			</tr>
+
+			<tr>
+				<td>
+					<label class="inline" for="config-data-webgs">WebGS</label>
+				</td>
+				<td>
+					<input type="checkbox" class="form-control" id="config-data-webgs" ng-model="config.data.webgs">
+				</td>
+			</tr>
+
+			<tr>
+				<td>
+					<label class="inline">ESC Arm value</label>
+				</td>
+				<td>
+					<input type="number" class="form-control" ng-model="config.data.escarm">
+				</td>
+			</tr>
+
+			<tr>
+				<td>
+					<label class="inline">Minimum throttle value</label>
+				</td>
+				<td>
+					<input type="number" class="form-control" ng-model="config.data.throttlemin">
+				</td>
+			</tr>
+
+		</tbody>
+	</table>
 </div>
