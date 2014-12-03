@@ -212,47 +212,45 @@ angular.module('instrument.attitude-indicator',['socket'])
 				$scope.nick = nick || $scope.nick;
 				$scope.yaw = yaw || $scope.yaw;
 
-				//Sett nick and roll in the range of 0 -> 2*PI
-				roll = roll % (Math.PI * 2);
+				//Sett nick and roll in the range of 0 -> 360
+				roll = roll % 360;
 				if(roll < 0) {
-					roll = roll + (Math.PI * 2);
+					roll = roll + 360;
 				}
 
-				nick = nick % (Math.PI * 2);
+				nick = nick % 360;
 				if(nick < 0) {
-					nick = nick + (Math.PI * 2);
+					nick = nick + 360;
 				}
 
-				yaw = yaw % (Math.PI * 2);
+				yaw = yaw % 360;
 				if(yaw < 0) {
-					yaw = yaw + (Math.PI * 2);
+					yaw = yaw + 360;
 				}
 
-
-				$scope.context.rotate(roll);
+				$scope.context.rotate(roll*Math.PI/180);
 
 				//Show center using nick
-				$scope.context.drawImage($scope.centerImage2, -150, -1350 + (nick / (Math.PI / 2) * 450));
-				if(nick < Math.PI) {
-					$scope.context.drawImage($scope.centerImage, -150, -450 + (nick / (Math.PI / 2) * 450));
+				$scope.context.drawImage($scope.centerImage2, -150, -1350 + (nick / 90 * 450));
+				if(nick < 180) {
+					$scope.context.drawImage($scope.centerImage, -150, -450 + (nick / 90 * 450));
 				} else {
-					$scope.context.drawImage($scope.centerImage, -150, -2250 + (nick / (Math.PI / 2) * 450));
+					$scope.context.drawImage($scope.centerImage, -150, -2250 + (nick / 90 * 450));
 				}
 
 				$scope.context.drawImage($scope.ringImage, -150, -150);
 
-				$scope.context.rotate(-roll);
+				$scope.context.rotate(-roll*Math.PI/180);
 
 				$scope.context.drawImage($scope.compassBackgroundImage, -100, 130);
-				$scope.context.drawImage($scope.compassNumbersImage, -150 - (yaw / (Math.PI / 2) * 450), 130);
+				$scope.context.drawImage($scope.compassNumbersImage, -150 - (yaw / 90 * 450), 130);
 
 				$scope.context.drawImage($scope.frameImage, -150, -150);
 			}
 
 			Socket.on('data', function(data){
-				console.log(data);
-				if(data.attitude) {
-					$scope.update(data.attitude.roll, data.attitude.nick, data.attitude.yaw)
+				if(data.imu) {
+					$scope.update(data.imu.degree.roll, data.imu.degree.nick, data.imu.degree.yaw)
 				}
 			});
 

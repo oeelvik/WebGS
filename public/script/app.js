@@ -6,7 +6,9 @@ var app = angular.module('webGS',
 		'serial', 
 		'drone.config', 
 		'instrument.graph-tricopter', 
-		'instrument.attitude-indicator'
+		'instrument.attitude-indicator',
+		'instrument.receiver',
+		'instrument.pidChart',
 	]
 )
 
