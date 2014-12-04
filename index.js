@@ -43,6 +43,21 @@ io.sockets.on("connection", function(socket){
 
 			var type = data[0];
 			switch (type) {
+				case 0:
+					socket.emit('message', 'log', String(data.slice(1)));
+					break;
+				case 1:
+					socket.emit('message', 'info', String(data.slice(1)));
+					break;
+				case 2:
+					socket.emit('message', 'warn', String(data.slice(1)));
+					break;
+				case 3:
+					socket.emit('message', 'error', String(data.slice(1)));
+					break;
+				case 10:
+					socket.emit('config', config2JSON(data.slice(1)));
+					break;
 				case 100: //DATA
 					socket.emit('data', streamMessageToJSON(data.slice(1)));
 					break;
@@ -82,7 +97,7 @@ io.sockets.on("connection", function(socket){
 			serial = null;
 		} else {
 			socket.emit("serialConnected");
-			sendCurrentConfig();
+			requestCurrentConfig();
 		}
 	}
 
@@ -96,19 +111,20 @@ io.sockets.on("connection", function(socket){
 		}
 	}
 
-	var sendCurrentConfig = function(){
+	var requestCurrentConfig = function(){
 		//TODO: get config from copter if avilable
 		var config = { "imu": { "gyro": { "roll": { "pin": 1, "rev": false }, "nick": { "pin": 2, "rev": false }, "yaw": { "rev": false, "pin": 3 } }, "accelerometer": { "roll": { "pin": 4, "rev": true }, "nick": { "rev": true, "pin": 5 }, "yaw": { "rev": true, "pin": 6 } } } }
 		console.log("Sending config to WebGS");
 		socket.emit('config', config);
 	}
-	sendCurrentConfig();
+	requestCurrentConfig();
 
 	socket.on('configUpdate', function(data){
 		console.log("Updating configuration");
 		console.log(data);
+		console.log(JSON2Config(data));
 		//TODO: update copter and send back new config
-		sendCurrentConfig();
+		requestCurrentConfig();
 	});
 
 	socket.on('serialWrite', function(data){
@@ -217,6 +233,204 @@ var streamMessageToJSON = function(message){
 	return r;
 }
 
+var JSON2Config = function(json){
+	var config = new Array();
+	config[0] = 
+		((json.happykillmore)? Math.pow(2, 6) : 0) |
+		((json.trigui)? Math.pow(2, 7) : 0) |
+		((json.webgs)? Math.pow(2, 5) : 0) |
+		((json.output.servo.rev)? Math.pow(2, 1) : 0);
+
+	config[1] = json.output.motor.left.pin;
+	config[2] = json.output.motor.right.pin;
+	config[3] = json.output.motor.rear.pin;
+	config[4] = json.output.servo.pin;
+
+	config[5] = json.receiver.throttlemin;
+	config[6] = json.output.motor.escarm;
+
+	config[7] = mapByte(json.pid.hover.p, 'p', true);
+	config[8] = mapByte(json.pid.hover.i, 'i', true);
+	config[9] = json.pid.hover.d;
+	config[10] = mapByte(json.pid.acro.p, 'p', true);
+	config[11] = mapByte(json.pid.acro.i, 'i', true);
+	config[12] = json.pid.acro.d;
+	config[13] = mapByte(json.pid.yaw.p, 'p', true);
+	config[14] = mapByte(json.pid.yaw.i, 'i', true);
+	config[15] = json.pid.yaw.d;
+
+	config[16] = 
+		((json.receiver.throttle.rev)? Math.pow(2, 0) : 0) |
+		((json.receiver.aileron.rev)? Math.pow(2, 1) : 0) |
+		((json.receiver.elevator.rev)? Math.pow(2, 2) : 0) |
+		((json.receiver.rudder.rev)? Math.pow(2, 3) : 0) |
+		((json.receiver.gear.rev)? Math.pow(2, 4) : 0) |
+		((json.receiver.flaps.rev)? Math.pow(2, 5) : 0);
+
+
+	config[17] = json.imu.gyro.roll.pin;
+	config[18] = json.imu.gyro.nick.pin;
+	config[19] = json.imu.gyro.yaw.pin;
+	config[20] = json.imu.accelerometer.roll.pin;
+	config[21] = json.imu.accelerometer.nick.pin;
+	config[22] = json.imu.accelerometer.vert.pin;
+
+	config[23] = 
+		((json.imu.gyro.roll.rev)? Math.pow(2, 0) : 0) |
+		((json.imu.gyro.nick.rev)? Math.pow(2, 1) : 0) |
+		((json.imu.gyro.yaw.rev)? Math.pow(2, 2) : 0) |
+		((json.imu.accelerometer.roll.rev)? Math.pow(2, 3) : 0) |
+		((json.imu.accelerometer.nick.rev)? Math.pow(2, 4) : 0) |
+		((json.imu.accelerometer.vert.rev)? Math.pow(2, 5) : 0);
+
+	config[24] = mapByte(json.imu.accelerometer.roll.trim, 'trim', true);
+	config[25] = mapByte(json.imu.accelerometer.nick.trim, 'trim', true);
+	config[26] = mapByte(json.imu.accelerometer.vert.trim, 'trim', true);
+
+	config[27] = mapByte(json.imu.accelerometer.weight, 'accelWeight', true);
+
+	return config;
+}
+
+var config2JSON = function(config){
+	return {
+		"happykillmore": Boolean(config[0] & Math.pow(2, 6)),
+		"trigui":  Boolean(config[0] & Math.pow(2, 7)), 
+		"webgs":  Boolean(config[0] & Math.pow(2, 5)),
+
+		"receiver": { 
+			"throttle": { 
+				"rev": Boolean(config[16] & Math.pow(2, 0)) 
+			}, 
+			"aileron": { 
+				"rev": Boolean(config[16] & Math.pow(2, 1)) 
+			}, 
+			"elevator": { 
+				"rev": Boolean(config[16] & Math.pow(2, 2)) 
+			}, 
+			"rudder": { 
+				"rev": Boolean(config[16] & Math.pow(2, 3)) 
+			}, 
+			"gear": { 
+				"rev": Boolean(config[16] & Math.pow(2, 4)) 
+			}, 
+			"flaps": { 
+				"rev": Boolean(config[16] & Math.pow(2, 5)) 
+			}, 
+			"throttlemin": config[5] 
+		}, 
+
+		"imu": { 
+			"gyro": { 
+				"roll": { 
+					"pin": config[17], 
+					"rev": Boolean(config[23] & Math.pow(2, 0))
+				}, 
+				"nick": { 
+					"pin": config[18], 
+					"rev": Boolean(config[23] & Math.pow(2, 1))
+				}, 
+				"yaw": { 
+					"pin": config[19], 
+					"rev": Boolean(config[23] & Math.pow(2, 2))
+				} 
+			}, 
+
+			"accelerometer": { 
+				"roll": { 
+					"pin": config[20], 
+					"rev": Boolean(config[23] & Math.pow(2, 3)), 
+					"trim": mapByte(config[24], 'trim') 
+				}, 
+				"nick": { 
+					"pin": config[21],
+					"rev": Boolean(config[23] & Math.pow(2, 4)), 
+					"trim": mapByte(config[25], 'trim') 
+				}, 
+				"vert": { 
+					"pin": config[22], 
+					"rev": Boolean(config[23] & Math.pow(2, 5)), 
+					"trim": mapByte(config[26], 'trim') 
+				}, 
+				"weight": mapByte(config[27], 'accelWeight'),
+			} 
+		},
+
+		"pid": {
+			"hover": {
+				"p": mapByte(config[7], 'p'),
+				"i": mapByte(config[8], 'i'),
+				"d": config[9] 
+			}, 
+			"acro": { 
+				"p": mapByte(config[10], 'p'),
+				"i": mapByte(config[11], 'i'),
+				"d": config[12] 
+			}, 
+			"yaw": { 
+				"p": mapByte(config[13], 'p'),
+				"i": mapByte(config[14], 'i'),
+				"d": config[15] 
+			}
+		},
+
+		"output": { 
+			"motor": { 
+				"left": { 
+					"pin": config[1] 
+				}, 
+				"right": { 
+					"pin": config[2] 
+				}, 
+				"rear": { 
+					"pin": config[3] 
+				},
+				"escarm": config[6]
+			}, 
+			"servo": { 
+				"pin": config[4],
+				"rev": Boolean(config[0] & Math.pow(2, 1)) 
+			}
+		}
+	}
+}
+
+var mapByte = function(value, type, toDrone){
+	var toDrone = toDrone || false;
+
+	var drone_min = 0;
+	var drone_max = 254;
+	var webgs_min = 0;
+	var webgs_max = 254;
+
+	switch(type) {
+		case 'p':
+			drone_max = 200;
+			webgs_max = 10;
+			break;
+		case 'i':
+			drone_max = 200;
+			webgs_max = 0.1;
+			break;
+		case 'accelWeight':
+			drone_max = 200;
+			webgs_max = 0.2;
+			break;
+		case 'trim':
+			drone_max = 254;
+			webgs_min = -127;
+			webgs_max = 127;
+			break;
+	}
+
+
+	if(toDrone) return map(value, webgs_min, webgs_max, drone_min, drone_max);
+	else return map(value, drone_min, drone_max, webgs_min, webgs_max);
+}
+
+var map = function(x, in_min, in_max, out_min, out_max){
+  return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+}
 
 var byteStreamParser = function () {
     var delimiter = 255;

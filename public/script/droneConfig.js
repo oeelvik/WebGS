@@ -3,28 +3,45 @@ angular.module('drone.config',['socket'])
 .factory('Config', function(Socket){
 	var conf =  {
 		default: {
+			"happykillmore": false,
+			"trigui": false, 
 			"webgs": true,
 
 			"receiver": { 
+				"throttle": { 
+					"rev": false 
+				}, 
+				"aileron": { 
+					"rev": false 
+				}, 
 				"elevator": { 
 					"rev": true 
 				}, 
 				"rudder": { 
 					"rev": true 
 				}, 
+				"gear": { 
+					"rev": false 
+				}, 
+				"flaps": { 
+					"rev": false 
+				},
 				"throttlemin": 50 
 			}, 
 
 			"imu": { 
 				"gyro": { 
 					"roll": { 
-						"pin": 4 
+						"pin": 4, 
+						"rev": false
 					}, 
 					"nick": { 
-						"pin": 3 
+						"pin": 3, 
+						"rev": false
 					}, 
 					"yaw": { 
-						"pin": 5 
+						"pin": 5, 
+						"rev": false
 					} 
 				}, 
 
@@ -35,11 +52,12 @@ angular.module('drone.config',['socket'])
 						"trim": 0 
 					}, 
 					"nick": { 
-						"pin": 2, 
+						"pin": 2,
+						"rev": false, 
 						"trim": 0 
 					}, 
 					"vert": { 
-						"pin": 1, 
+						"pin": 0, 
 						"rev": true, 
 						"trim": 0 
 					}, 
