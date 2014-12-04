@@ -11,7 +11,6 @@
 
 		<!--<link rel="stylesheet" href="lib/chart/angular-chart.css">-->
 
-
 	</head>
 
 	<body>
@@ -20,7 +19,9 @@
 				<div class="col-md-5">
 
 					<div class="tabset-toolbar" ng-controller="ConfigCtrl">
-						<button ng-click="config.submit()" class="btn btn-success" ng-show="!config.isUnchanged()">Submitt</button>
+						<button ng-click="config.useDefault()" class="btn btn-warning" ng-show="!config.isDefault()">Use default</button>
+						<button ng-click="config.cansel()" class="btn btn-warning" ng-show="!config.isCurrent()">Cansel</button>
+						<button ng-click="config.submit()" class="btn btn-success" ng-show="!config.isCurrent()">Submit</button>
 					</div>
 
 					<tabset>
@@ -30,21 +31,28 @@
 							<receiver class="instrument"></receiver>
 						</tab>
 
-						<tab heading="Conf">
+						<tab heading="Main">
 							<config-main></config-main>
 						</tab>
 
-						<!-- Deprecated:
-						<tab heading="IO">
-							<config-io></config-io>
-						</tab>-->
+						<tab heading="Receiver">
+							<config-receiver></config-receiver>
+						</tab>
+
+						<tab heading="IMU">
+							<config-imu></config-imu>
+						</tab>
+
+						<tab heading="Motors">
+							<config-motors></config-motors>
+						</tab>
 
 						<tab heading="PID">
 							<config-pid></config-pid>
 						</tab>
 
 						<tab heading="Out" ng-controller="ConfigCtrl">
-							{{config | json}}
+							{{config.data | json}}
 						</tab>
 					</tabset>
 

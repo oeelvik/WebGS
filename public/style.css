@@ -2,22 +2,6 @@ body {
 	padding-top: 15px;
 }
 
-canvas {
-	border: 1px solid #000;
-}
-
-.console div.message.info .glyphicon {
-	color: #5bc0de;
-}
-
-.console div.message.warn .glyphicon {
-	color: #f0ad4e;
-}
-
-.console div.message.error {
-	color: #d9534f;
-}
-
 .tabset-toolbar {
 	float: right;
 }
@@ -37,16 +21,6 @@ ul.nav-tabs {
 	box-shadow: 0 1px 1px rgba(0,0,0,.05);
 }
 
-table label.inline {
-	width: 100%;
-	text-align: right;
-	padding-right: 15px;
-}
-
-#drone-config-i-o input {
-	max-width: 70px;
-}
-
 pid-chart {
 	display: block;
 	width: 100%;
@@ -57,4 +31,32 @@ pid-chart {
 	display: inline-block;
 	width: 300px;
 	height: 300px;
+	border: 1px solid #ddd;
+}
+
+table.configuration label.inline {
+	width: 100%;
+	text-align: right;
+	padding-right: 15px;
+}
+
+table.configuration td {
+	min-width: 40px;
+}
+
+table.configuration input.form-control[type=checkbox] {
+	width: 34px;
+	margin: 0 4px;
+}
+
+.console div.message.info .glyphicon {
+	color: #5bc0de;
+}
+
+.console div.message.warn .glyphicon {
+	color: #f0ad4e;
+}
+
+.console div.message.error {
+	color: #d9534f;
 }

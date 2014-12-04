@@ -1,0 +1,70 @@
+<table class="configuration">
+	<thead>
+		<tr>
+			<td></td>
+			<th>Reverse</th>
+		</tr>
+	</thead>
+	<tbody>
+	
+		<tr>
+			<td><label class="inline">Receiver Throttle</label></td>
+			<td>
+				<input type="checkbox" class="form-control" ng-model="config.data.receiver.throttle.rev">
+			</td>
+		</tr>
+
+		<tr>
+			<td><label class="inline">Receiver Aileron</label></td>
+			<td>
+				<input type="checkbox" class="form-control" ng-model="config.data.receiver.aileron.rev">
+			</td>
+		</tr>
+
+		<tr>
+			<td><label class="inline">Receiver Elevator</label></td>
+			<td>
+				<input type="checkbox" class="form-control" ng-model="config.data.receiver.elevator.rev">
+			</td>
+		</tr>
+
+		<tr>
+			<td><label class="inline">Receiver Rudder</label></td>
+			<td>
+				<input type="checkbox" class="form-control" ng-model="config.data.receiver.rudder.rev">
+			</td>
+		</tr>
+
+		<tr>
+			<td><label class="inline">Receiver Gear</label></td>
+			<td>
+				<input type="checkbox" class="form-control" ng-model="config.data.receiver.gear.rev">
+			</td>
+		</tr>
+
+		<tr>
+			<td><label class="inline">Receiver Flaps</label></td>
+			<td>
+				<input type="checkbox" class="form-control" ng-model="config.data.receiver.flaps.rev">
+			</td>
+		</tr>
+
+	</tbody>
+	<thead>
+		<tr>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+		</tr>
+	</thead>
+	<tbody>
+
+		<tr>
+			<td>
+				<label class="inline">Minimum throttle value</label>
+			</td>
+			<td colspan="2">
+				<input type="number" min="0" max="254" class="form-control" ng-model="config.data.receiver.throttlemin">
+			</td>
+		</tr>
+	</tbody>
+</table>

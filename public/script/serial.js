@@ -2,8 +2,6 @@ angular.module('serial',['socket', 'console'])
 
 .factory('Serial', function($rootScope, Socket, Console){
 
-	Socket.emit('listSerialPorts');
-
 	var serial = {
 		connected: false,
 		ports: [],

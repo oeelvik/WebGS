@@ -1,55 +1,33 @@
-<div id="drone-config-main">
-	
+<table class="configuration">
 
-	<table>
+	<tbody>
 
-		<tbody>
+		<tr>
+			<td>
+				<label class="inline" for="config-data-happykillmore">Happy Killmore</label>
+			</td>
+			<td>
+				<input type="checkbox" class="form-control" id="config-data-happykillmore" ng-model="config.data.happykillmore">
+	    	</td>
+    	</tr>
 
-			<tr>
-				<td>
-					<label class="inline" for="config-data-happykillmore">Happy Killmore</label>
-				</td>
-				<td>
-					<input type="checkbox" class="form-control" id="config-data-happykillmore" ng-model="config.data.happykillmore">
-		    	</td>
-	    	</tr>
+		<tr>
+			<td>
+				<label class="inline" for="config-data-trigui">TriGUI</label>
+			</td>
+			<td>
+	    		<input type="checkbox" class="form-control" id="config-data-trigui" ng-model="config.data.trigui">
+			</td>
+		</tr>
 
-			<tr>
-				<td>
-					<label class="inline" for="config-data-trigui">TriGUI</label>
-				</td>
-				<td>
-		    		<input type="checkbox" class="form-control" id="config-data-trigui" ng-model="config.data.trigui">
-				</td>
-			</tr>
+		<tr>
+			<td>
+				<label class="inline" for="config-data-webgs">WebGS</label>
+			</td>
+			<td>
+				<input type="checkbox" class="form-control" id="config-data-webgs" ng-model="config.data.webgs">
+			</td>
+		</tr>
 
-			<tr>
-				<td>
-					<label class="inline" for="config-data-webgs">WebGS</label>
-				</td>
-				<td>
-					<input type="checkbox" class="form-control" id="config-data-webgs" ng-model="config.data.webgs">
-				</td>
-			</tr>
-
-			<tr>
-				<td>
-					<label class="inline">ESC Arm value</label>
-				</td>
-				<td>
-					<input type="number" class="form-control" ng-model="config.data.escarm">
-				</td>
-			</tr>
-
-			<tr>
-				<td>
-					<label class="inline">Minimum throttle value</label>
-				</td>
-				<td>
-					<input type="number" class="form-control" ng-model="config.data.throttlemin">
-				</td>
-			</tr>
-
-		</tbody>
-	</table>
-</div>
+	</tbody>
+</table>
