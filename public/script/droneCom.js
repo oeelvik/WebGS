@@ -79,18 +79,19 @@ angular.module('drone.com',['socket', 'console'])
 
 		config[5] = json.receiver.throttlemin;
 		config[6] = json.output.motor.escarm;
+		config[7] = json.output.motor.spinup;
 
-		config[7] = mapByte(json.pid.hover.p, 'p', true);
-		config[8] = mapByte(json.pid.hover.i, 'i', true);
-		config[9] = json.pid.hover.d;
-		config[10] = mapByte(json.pid.acro.p, 'p', true);
-		config[11] = mapByte(json.pid.acro.i, 'i', true);
-		config[12] = json.pid.acro.d;
-		config[13] = mapByte(json.pid.yaw.p, 'p', true);
-		config[14] = mapByte(json.pid.yaw.i, 'i', true);
-		config[15] = json.pid.yaw.d;
+		config[8] = mapByte(json.pid.hover.p, 'p', true);
+		config[9] = mapByte(json.pid.hover.i, 'i', true);
+		config[10] = json.pid.hover.d;
+		config[11] = mapByte(json.pid.acro.p, 'p', true);
+		config[12] = mapByte(json.pid.acro.i, 'i', true);
+		config[13] = json.pid.acro.d;
+		config[14] = mapByte(json.pid.yaw.p, 'p', true);
+		config[15] = mapByte(json.pid.yaw.i, 'i', true);
+		config[16] = json.pid.yaw.d;
 
-		config[16] = 
+		config[17] = 
 			((json.receiver.throttle.rev)? Math.pow(2, 0) : 0) |
 			((json.receiver.aileron.rev)? Math.pow(2, 1) : 0) |
 			((json.receiver.elevator.rev)? Math.pow(2, 2) : 0) |
@@ -99,14 +100,14 @@ angular.module('drone.com',['socket', 'console'])
 			((json.receiver.flaps.rev)? Math.pow(2, 5) : 0);
 
 
-		config[17] = json.imu.gyro.roll.pin;
-		config[18] = json.imu.gyro.nick.pin;
-		config[19] = json.imu.gyro.yaw.pin;
-		config[20] = json.imu.accelerometer.roll.pin;
-		config[21] = json.imu.accelerometer.nick.pin;
-		config[22] = json.imu.accelerometer.vert.pin;
+		config[18] = json.imu.gyro.roll.pin;
+		config[19] = json.imu.gyro.nick.pin;
+		config[20] = json.imu.gyro.yaw.pin;
+		config[21] = json.imu.accelerometer.roll.pin;
+		config[22] = json.imu.accelerometer.nick.pin;
+		config[23] = json.imu.accelerometer.vert.pin;
 
-		config[23] = 
+		config[24] = 
 			((json.imu.gyro.roll.rev)? Math.pow(2, 0) : 0) |
 			((json.imu.gyro.nick.rev)? Math.pow(2, 1) : 0) |
 			((json.imu.gyro.yaw.rev)? Math.pow(2, 2) : 0) |
@@ -114,11 +115,11 @@ angular.module('drone.com',['socket', 'console'])
 			((json.imu.accelerometer.nick.rev)? Math.pow(2, 4) : 0) |
 			((json.imu.accelerometer.vert.rev)? Math.pow(2, 5) : 0);
 
-		config[24] = mapByte(json.imu.accelerometer.roll.trim, 'trim', true);
-		config[25] = mapByte(json.imu.accelerometer.nick.trim, 'trim', true);
-		config[26] = mapByte(json.imu.accelerometer.vert.trim, 'trim', true);
+		config[25] = mapByte(json.imu.accelerometer.roll.trim, 'trim', true);
+		config[26] = mapByte(json.imu.accelerometer.nick.trim, 'trim', true);
+		config[27] = mapByte(json.imu.accelerometer.vert.trim, 'trim', true);
 
-		config[27] = mapByte(json.imu.accelerometer.weight, 'accelWeight', true);
+		config[28] = mapByte(json.imu.accelerometer.weight, 'accelWeight', true);
 
 		//limit all values to integers between 0 <-> 254
 		for(var i = 0; i < config.length; i++){
@@ -138,22 +139,22 @@ angular.module('drone.com',['socket', 'console'])
 
 			"receiver": { 
 				"throttle": { 
-					"rev": Boolean(config[16] & Math.pow(2, 0)) 
+					"rev": Boolean(config[17] & Math.pow(2, 0)) 
 				}, 
 				"aileron": { 
-					"rev": Boolean(config[16] & Math.pow(2, 1)) 
+					"rev": Boolean(config[17] & Math.pow(2, 1)) 
 				}, 
 				"elevator": { 
-					"rev": Boolean(config[16] & Math.pow(2, 2)) 
+					"rev": Boolean(config[17] & Math.pow(2, 2)) 
 				}, 
 				"rudder": { 
-					"rev": Boolean(config[16] & Math.pow(2, 3)) 
+					"rev": Boolean(config[17] & Math.pow(2, 3)) 
 				}, 
 				"gear": { 
-					"rev": Boolean(config[16] & Math.pow(2, 4)) 
+					"rev": Boolean(config[17] & Math.pow(2, 4)) 
 				}, 
 				"flaps": { 
-					"rev": Boolean(config[16] & Math.pow(2, 5)) 
+					"rev": Boolean(config[17] & Math.pow(2, 5)) 
 				}, 
 				"throttlemin": config[5] 
 			}, 
@@ -161,54 +162,54 @@ angular.module('drone.com',['socket', 'console'])
 			"imu": { 
 				"gyro": { 
 					"roll": { 
-						"pin": config[17], 
-						"rev": Boolean(config[23] & Math.pow(2, 0))
+						"pin": config[18], 
+						"rev": Boolean(config[24] & Math.pow(2, 0))
 					}, 
 					"nick": { 
-						"pin": config[18], 
-						"rev": Boolean(config[23] & Math.pow(2, 1))
+						"pin": config[19], 
+						"rev": Boolean(config[24] & Math.pow(2, 1))
 					}, 
 					"yaw": { 
-						"pin": config[19], 
-						"rev": Boolean(config[23] & Math.pow(2, 2))
+						"pin": config[20], 
+						"rev": Boolean(config[24] & Math.pow(2, 2))
 					} 
 				}, 
 
 				"accelerometer": { 
 					"roll": { 
-						"pin": config[20], 
-						"rev": Boolean(config[23] & Math.pow(2, 3)), 
-						"trim": mapByte(config[24], 'trim') 
-					}, 
-					"nick": { 
-						"pin": config[21],
-						"rev": Boolean(config[23] & Math.pow(2, 4)), 
+						"pin": config[21], 
+						"rev": Boolean(config[24] & Math.pow(2, 3)), 
 						"trim": mapByte(config[25], 'trim') 
 					}, 
-					"vert": { 
-						"pin": config[22], 
-						"rev": Boolean(config[23] & Math.pow(2, 5)), 
+					"nick": { 
+						"pin": config[22],
+						"rev": Boolean(config[24] & Math.pow(2, 4)), 
 						"trim": mapByte(config[26], 'trim') 
 					}, 
-					"weight": mapByte(config[27], 'accelWeight'),
+					"vert": { 
+						"pin": config[23], 
+						"rev": Boolean(config[24] & Math.pow(2, 5)), 
+						"trim": mapByte(config[27], 'trim') 
+					}, 
+					"weight": mapByte(config[28], 'accelWeight'),
 				} 
 			},
 
 			"pid": {
 				"hover": {
-					"p": mapByte(config[7], 'p'),
-					"i": mapByte(config[8], 'i'),
-					"d": config[9] 
+					"p": mapByte(config[8], 'p'),
+					"i": mapByte(config[9], 'i'),
+					"d": config[10] 
 				}, 
 				"acro": { 
-					"p": mapByte(config[10], 'p'),
-					"i": mapByte(config[11], 'i'),
-					"d": config[12] 
+					"p": mapByte(config[11], 'p'),
+					"i": mapByte(config[12], 'i'),
+					"d": config[13] 
 				}, 
 				"yaw": { 
-					"p": mapByte(config[13], 'p'),
-					"i": mapByte(config[14], 'i'),
-					"d": config[15] 
+					"p": mapByte(config[14], 'p'),
+					"i": mapByte(config[15], 'i'),
+					"d": config[16] 
 				}
 			},
 
@@ -223,7 +224,8 @@ angular.module('drone.com',['socket', 'console'])
 					"rear": { 
 						"pin": config[3] 
 					},
-					"escarm": config[6]
+					"escarm": config[6],
+					"spinup": config[7]
 				}, 
 				"servo": { 
 					"pin": config[4],

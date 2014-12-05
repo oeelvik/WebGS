@@ -192,8 +192,8 @@ var fromSerialParser = function () {
 					//add valid message to messages
 					messages.push[data];
 				} else {
-					console.log("Invalid message received from serial connection:");
-					console.log(data);
+					console.error("Invalid message received from serial connection:");
+					console.error(data);
 				}
 
 				var parityOdd = 0;

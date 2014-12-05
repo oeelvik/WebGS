@@ -94,7 +94,8 @@ angular.module('drone.config',['drone.com'])
 					"rear": { 
 						"pin": 9 
 					},
-					"escarm": 22
+					"escarm": 22,
+					"spinup": 50
 				}, 
 				"servo": { 
 					"pin": 3,
