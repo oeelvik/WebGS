@@ -96,51 +96,51 @@ io.sockets.on("connection", function(socket){
 		});
 	});
 
-	/**
-	 *	TODO: remove! Sending dummy data
-	 */
-	var data = [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-	var sendData = function(i){
-		setTimeout(function(){
-			data[0] = new Date().getTime();
-			
-			setpoint = Math.sin(i * Math.PI / 180) * 100;
-			if(setpoint < 0) setpoint += 254;
-			data[8] = setpoint;
-			
-			thrust = Math.cos(i * Math.PI / 180) * 100;
-			if(thrust < 0) thrust += 254;
-			data[21] = thrust;
+	//node index.js test = send dummy test data
+	if(process.argv[2] == 'test'){
+		var data = [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+		var sendData = function(i){
+			setTimeout(function(){
+				data[0] = new Date().getTime();
+				
+				setpoint = Math.sin(i * Math.PI / 180) * 100;
+				if(setpoint < 0) setpoint += 254;
+				data[8] = setpoint;
+				
+				thrust = Math.cos(i * Math.PI / 180) * 100;
+				if(thrust < 0) thrust += 254;
+				data[21] = thrust;
 
-			data[1] = 127 + Math.sin(i * Math.PI / 180) * 127;
-			data[2] = 127 + Math.cos(i * Math.PI / 180) * 127;
-			data[3] = 127 + Math.sin(i * Math.PI / 180) * 127;
-			data[4] = 127 + Math.cos(i * Math.PI / 180) * 127;
-			data[5] = 127 + Math.sin(i * Math.PI / 180) * 127;
-			data[6] = 127 + Math.cos(i * Math.PI / 180) * 127;
+				data[1] = 127 + Math.sin(i * Math.PI / 180) * 127;
+				data[2] = 127 + Math.cos(i * Math.PI / 180) * 127;
+				data[3] = 127 + Math.sin(i * Math.PI / 180) * 127;
+				data[4] = 127 + Math.cos(i * Math.PI / 180) * 127;
+				data[5] = 127 + Math.sin(i * Math.PI / 180) * 127;
+				data[6] = 127 + Math.cos(i * Math.PI / 180) * 127;
 
-			if(i<361){
-				data[11] = i / 180 * 127;
-			} else if(i < 721) {
-				data[12] = (i - 360) / 180 * 127;
-			} else if(i < 1081) {
-				data[13] = (i - 720) / 180 * 127;
-			}
+				if(i<361){
+					data[11] = i / 180 * 127;
+				} else if(i < 721) {
+					data[12] = (i - 360) / 180 * 127;
+				} else if(i < 1081) {
+					data[13] = (i - 720) / 180 * 127;
+				}
 
-			data.unshift(100);
-			socket.emit("data", data);
-			data.shift();
+				data.unshift(100);
+				socket.emit("data", data);
+				data.shift();
 
-			if(i >=1080) {
-				i = 0;
-			}
+				if(i >=1080) {
+					i = 0;
+				}
 
-			sendData(i+=5);
+				sendData(i+=5);
 
-		}, 50);
+			}, 50);
+		}
+
+		setTimeout(function(){sendData(0)}, 1000);
 	}
-
-	setTimeout(function(){sendData(0)}, 1000);
 });
 
 var DRONE_MESSAGE_HEADER = 255;
