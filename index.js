@@ -33,10 +33,6 @@ io.sockets.on("connection", function(socket){
 			parser: fromSerialParser(),
 			baudRate: baudRate
 		}, true, serialConnected);
-
-		serial.on('data', function (data) {
-			socket.emit('data', data);
-		});
 	}
 
 	socket.on('serialConnect', function(portName, baudRate){
@@ -67,6 +63,11 @@ io.sockets.on("connection", function(socket){
 			socket.emit("message", "error", 'Failed to open serial connection: '+error);
 			serial = null;
 		} else {
+
+			serial.on('data', function (data) {
+				socket.emit('data', data);
+			});
+
 			socket.emit("serialConnected");
 		}
 	}
