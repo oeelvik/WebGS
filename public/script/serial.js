@@ -1,6 +1,6 @@
 angular.module('serial',['socket', 'console'])
 
-.factory('Serial', function($rootScope, Socket, Console){
+.factory('Serial', function(Socket, Console){
 
 	var serial = {
 		connected: false,
@@ -24,15 +24,10 @@ angular.module('serial',['socket', 'console'])
 
 	Socket.on("serialConnected", function(){
 		serial.connected = true;
-		Socket.emit("configRequest");
 	});
 
 	Socket.on("serialDisconnected", function(){
 		serial.connected = false;
-	});
-
-	Socket.on("serialRead", function(){
-		$rootScope.$broadcast('serialRead');
 	});
 
 	return serial;

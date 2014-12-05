@@ -1,4 +1,4 @@
-angular.module('instrument.receiver',['socket'])
+angular.module('instrument.receiver',[])
 
 .directive('receiver', function(){
 	return {
@@ -35,7 +35,7 @@ angular.module('instrument.receiver',['socket'])
                 }
             });
 		},
-		controller: function($scope, Socket){
+		controller: function($scope){
 			$scope.data = new Array();
 			$scope.data.push(new Array(0, 0));
 			$scope.data.push(new Array(1, 0));
@@ -44,7 +44,7 @@ angular.module('instrument.receiver',['socket'])
 			$scope.data.push(new Array(4, 0));
 			$scope.data.push(new Array(5, 0));
 
-			Socket.on('data', function(data){
+			$scope.$on('dataReceived', function(event, data){
 				if(data.receiver) {
 					$scope.data[0][1] = data.receiver.throttle;
 					$scope.data[1][1] = data.receiver.aileron;

@@ -96,6 +96,12 @@ angular.module('instrument.graph-tricopter',[])
 				$scope.context.fillRect(10, 260, 280, 30);
 			}
 
+			$scope.$on('dataReceived', function(event, data){
+				if(data.mix) {
+					$scope.setThrust(data.mix.leftThrust, data.mix.rightThrust, data.mix.rearThrust, data.mix.servoPos);
+				}
+			});
+
 		}
 	}
 })

@@ -1,4 +1,4 @@
-angular.module('instrument.pidChart',['socket'])
+angular.module('instrument.pidChart',[])
 
 .directive('pidChart', function(){
 	return {
@@ -35,7 +35,7 @@ angular.module('instrument.pidChart',['socket'])
                 }
             });
 		},
-		controller: function($scope, Socket){
+		controller: function($scope){
 			
 			$scope.data = new Array();
 			$scope.data.push({
@@ -51,7 +51,7 @@ angular.module('instrument.pidChart',['socket'])
 				data: new Array()
 			});
 
-			Socket.on('data', function(data){
+			$scope.$on('dataReceived', function(event, data){
 				if(data.time && data.imu && data.output && data.setPoint) {
 
 
@@ -79,10 +79,17 @@ angular.module('instrument.pidChart',['socket'])
 					$scope.data[1].data.push([data.time, measurement]);
 					$scope.data[2].data.push([data.time, thrust]);
 					
+					//Limit data arrays
 					if ($scope.data[0].data.length > $scope.maxlength){
-						$scope.data[0].data = $scope.data[0].data.slice(1);
-						$scope.data[1].data = $scope.data[1].data.slice(1);
-						$scope.data[2].data = $scope.data[2].data.slice(1);
+						$scope.data[0].data = $scope.data[0].data.slice($scope.data[0].data.length - $scope.maxlength);
+					}
+
+					if ($scope.data[1].data.length > $scope.maxlength){
+						$scope.data[1].data = $scope.data[1].data.slice($scope.data[1].data.length - $scope.maxlength);
+					}
+
+					if ($scope.data[2].data.length > $scope.maxlength){
+						$scope.data[2].data = $scope.data[2].data.slice($scope.data[2].data.length - $scope.maxlength);
 					}
 
 					$scope.updateCount++;

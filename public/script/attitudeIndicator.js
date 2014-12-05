@@ -1,4 +1,4 @@
-angular.module('instrument.attitude-indicator',['socket'])
+angular.module('instrument.attitude-indicator',[])
 
 .directive('attitudeIndicator', function(){
 	return {
@@ -13,7 +13,7 @@ angular.module('instrument.attitude-indicator',['socket'])
 
 			scope.update(0, 0);
 		},
-		controller: function($scope, Socket){
+		controller: function($scope){
 
 			$scope.centerImage = document.createElement('canvas');
 			$scope.centerImage.width = 300;
@@ -248,7 +248,7 @@ angular.module('instrument.attitude-indicator',['socket'])
 				$scope.context.drawImage($scope.frameImage, -150, -150);
 			}
 
-			Socket.on('data', function(data){
+			$scope.$on('dataReceived', function(event, data){
 				if(data.imu) {
 					$scope.update(data.imu.degree.roll, data.imu.degree.nick, data.imu.degree.yaw)
 				}

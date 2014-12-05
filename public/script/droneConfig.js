@@ -1,6 +1,6 @@
-angular.module('drone.config',['socket'])
+angular.module('drone.config',['drone.com'])
 
-.factory('Config', function(Socket){
+.factory('Config', function($rootScope, DroneCom){
 	var conf =  {
 		default: {
 			"happykillmore": false,
@@ -112,9 +112,7 @@ angular.module('drone.config',['socket'])
 		},
 
 		submit: function(){
-			Socket.emit("configUpdate", this.data);
-
-			//TODO: Uptade current on success
+			DroneCom.setConfig(this.data);
 		},
 
 		useDefault: function(){
@@ -128,7 +126,7 @@ angular.module('drone.config',['socket'])
 	conf.current = angular.copy(conf.default);
 	conf.data = angular.copy(conf.default);
 
-	Socket.on("config", function(data){
+	$rootScope.$on("configReceived", function(event, data){
 		conf.current = data;
 		conf.data = angular.copy(conf.current);
 	});
