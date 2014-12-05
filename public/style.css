@@ -49,6 +49,11 @@ table.configuration input.form-control[type=checkbox] {
 	margin: 0 4px;
 }
 
+.console {
+	max-height: 300px;
+	overflow: auto;
+}
+
 .console div.message.info .glyphicon {
 	color: #5bc0de;
 }
