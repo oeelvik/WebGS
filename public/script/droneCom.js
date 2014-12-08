@@ -1,6 +1,6 @@
 angular.module('drone.com',['socket', 'console'])
 
-.factory('DroneCom', function($rootScope, Socket, Console){
+.factory('DroneCom', function($rootScope, $timeout, Socket, Console){
 	var MESSAGE_TYPE = {
 		LOG: 0,
 		INFO: 1,
@@ -26,15 +26,15 @@ angular.module('drone.com',['socket', 'console'])
 			},
 			setPoint: {
 				vertical: message[7],
-				roll: message[8] / 254 * 360,
-				nick: message[9] / 254 * 360,
-				yaw: message[10] / 254 * 360,
+				roll: (message[8] - 127) / 254 * 360,
+				nick: (message[9] - 127) / 254 * 360,
+				yaw: (message[10] - 127) / 254 * 360,
 			},
 			imu: {
 				degree:{
-					roll: message[11] / 254 * 360,
-					nick: message[12] / 254 * 360,
-					yaw: message[13] / 254 * 360,
+					roll: (message[11] - 127) / 254 * 360,
+					nick: (message[12] - 127) / 254 * 360,
+					yaw: (message[13] - 127) / 254 * 360,
 				},
 				rotation:{
 					roll: message[14],
@@ -49,9 +49,9 @@ angular.module('drone.com',['socket', 'console'])
 			},
 			output: {
 				vertical: message[20],
-				roll: message[21] / 254 * 360,
-				nick: message[22] / 254 * 360,
-				yaw: message[23] / 254 * 360,
+				roll: (message[21] - 127) / 254 * 360,
+				nick: (message[22] - 127) / 254 * 360,
+				yaw: (message[23] - 127) / 254 * 360,
 			},
 			mix: {
 				leftThrust: message[24],
@@ -272,20 +272,28 @@ angular.module('drone.com',['socket', 'console'])
 	  return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 	}
 
+	var byteArray2String = function(array){
+		var result = "";
+		for (var i = 0; i < array.length; i++) {
+			result += String.fromCharCode(array[i]);
+		}
+		return result;
+	}
+
 	Socket.on('data', function(message){
 		var type = message.shift();
 		switch (type) {
 			case MESSAGE_TYPE.LOG:
-				Console.log("DRONE: " + String(message));
+				Console.log("DRONE: " + byteArray2String(message));
 				break;
 			case MESSAGE_TYPE.INFO:
-				Console.info("DRONE: " + String(message));
+				Console.info("DRONE: " + byteArray2String(message));
 				break;
 			case MESSAGE_TYPE.WARN:
-				Console.warn("DRONE: " + String(message));
+				Console.warn("DRONE: " + byteArray2String(message));
 				break;
 			case MESSAGE_TYPE.ERROR:
-				Console.error("DRONE: " + String(message));
+				Console.error("DRONE: " + byteArray2String(message));
 				break;
 			case MESSAGE_TYPE.CONFIG:
 				$rootScope.$broadcast('configReceived', config2JSON(message));
@@ -303,7 +311,10 @@ angular.module('drone.com',['socket', 'console'])
 	});
 
 	Socket.on("serialConnected", function(){
-		Socket.emit("data", [MESSAGE_TYPE.CONFIG_REQUEST]);
+		//Wait while arduino is reset
+		$timeout(function(){
+			Socket.emit("data", [MESSAGE_TYPE.CONFIG_REQUEST]);
+		}, 5000);
 	});
 
 	var droneCom = {

@@ -40,6 +40,11 @@ angular.module('instrument.graph-tricopter',[])
 			}
 
 			$scope.setThrust = function(left, right, rear, yaw) {
+				left = left / 360 + 0.5;
+				right = right / 360 + 0.5;
+				rear = rear / 360 + 0.5;
+				yaw = yaw / 360 + 0.5;
+
 				$scope.context.beginPath();
 				$scope.context.arc(60, 50, 30, 0, 2 * Math.PI);
 				$scope.context.closePath();

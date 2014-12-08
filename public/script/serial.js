@@ -17,7 +17,6 @@ angular.module('serial',['socket', 'console'])
 
 	Socket.on("serialPorts", function(ports){
 		serial.ports = ports;
-		console.log(ports);
 		if(ports.length < 1) Console.warn("No serialports available");
 		else serial.portname = ports[0].comName;
 	});

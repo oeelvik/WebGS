@@ -19,12 +19,17 @@ var serial = null;
 
 io.sockets.on("connection", function(socket){
 
+	var prevPorts = null;
 	var listSerialPorts = function(){
 		serialPort.list(function (err, ports) {
+			if(JSON.stringify(prevPorts)==JSON.stringify(ports)) return;
+
 			console.log("Avilable ports:");
 			console.log(ports);
 			socket.emit("serialPorts", ports);
+			prevPorts = ports;
 		});
+		setTimeout(listSerialPorts, 1000);
 	}
 	listSerialPorts();
 
@@ -83,18 +88,21 @@ io.sockets.on("connection", function(socket){
 	}
 
 	socket.on('data', function(data){
+		var message = toSerialMessage(data)
 		console.log("Attemt to send message to drone:");
-		console.log(toSerialMessage(data));
+		console.log(message);
 
 		if(serial == null) {
 			socket.emit('message', 'error', 'Unable to write to serial. Disconnected.');
 			return;
 		}
 
-		serial.write(toSerialMessage(data), function(error, results) {
+		serial.write(message, function(error, results) {
 			if(error) socket.emit('message', 'error', 'Unable to send data to drone: ' + error);
 			else console.log('results ' + results);
 		});
+
+
 	});
 
 	//node index.js test = send dummy test data
@@ -172,33 +180,40 @@ var fromSerialParser = function () {
     return function (emitter, buffer) {
 		// Collect data
 		for (var i = 0; i < buffer.length; i++) {
-			if (buffer[i] === delimiter && data.length > 2) {
+			if (buffer[i] === delimiter) {
+				if(data.length > 2) {
 
-				//Last two bytes i parityBytes and should not be included in parity count
-				if(data[data.length-1] % 2 == 0) parityEven--;
-				else parityOdd--;
-				if(data[data.length-2] % 2 == 0) parityEven--;
-				else parityOdd--;
+					//Last two bytes i parityBytes and should not be included in parity count
+					if(data[data.length-1] % 2 == 0) parityEven--;
+					else parityOdd--;
+					if(data[data.length-2] % 2 == 0) parityEven--;
+					else parityOdd--;
 
-				//add valid message to messages
-				if(		
-						data[data.length-1] == parityEven &&
-						data[data.length-2] == parityOdd
-						){
-
-					//Remove parityBytes
-					data.pop();
-					data.pop();
 
 					//add valid message to messages
-					messages.push[data];
+					if(		
+							data[data.length-1] == parityEven &&
+							data[data.length-2] == parityOdd
+							){
+
+						//Remove parityBytes
+						data.pop();
+						data.pop();
+
+						//add valid message to messages
+						messages.push(data);
+					} else {
+						console.error("Invalid message received from serial connection (parity does not match):");
+						console.error(data);
+					}
+
 				} else {
-					console.error("Invalid message received from serial connection:");
+					console.error("Invalid message received from serial connection (to short):");
 					console.error(data);
 				}
 
-				var parityOdd = 0;
-				var parityEven = 0;
+				parityOdd = 0;
+				parityEven = 0;
 				data = new Array();
 			} else {
 				if(buffer[i] % 2 == 0) parityEven++;
