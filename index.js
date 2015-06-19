@@ -112,12 +112,10 @@ io.sockets.on("connection", function(socket){
 			setTimeout(function(){
 				data[0] = new Date().getTime();
 				
-				setpoint = Math.sin(i * Math.PI / 180) * 100;
-				if(setpoint < 0) setpoint += 254;
+				setpoint = 127 + Math.sin(i * Math.PI / 180) * 100;
 				data[8] = setpoint;
 				
-				thrust = Math.cos(i * Math.PI / 180) * 100;
-				if(thrust < 0) thrust += 254;
+				thrust = 127 + Math.cos(i * Math.PI / 180) * 100;
 				data[21] = thrust;
 
 				data[1] = 127 + Math.sin(i * Math.PI / 180) * 127;
@@ -127,6 +125,8 @@ io.sockets.on("connection", function(socket){
 				data[5] = 127 + Math.sin(i * Math.PI / 180) * 127;
 				data[6] = 127 + Math.cos(i * Math.PI / 180) * 127;
 
+				if(data[1] < 0) data[1] += 254;
+
 				if(i<361){
 					data[11] = i / 180 * 127;
 				} else if(i < 721) {
@@ -134,6 +134,10 @@ io.sockets.on("connection", function(socket){
 				} else if(i < 1081) {
 					data[13] = (i - 720) / 180 * 127;
 				}
+
+				data[17] = 127 + (Math.random() - 0.5) * 2;
+				data[18] = 127 + (Math.random() - 0.5) * 2;
+				data[19] = 122 + (Math.random() - 0.5) * 3;
 
 				data.unshift(100);
 				socket.emit("data", data);

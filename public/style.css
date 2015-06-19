@@ -27,6 +27,12 @@ pid-chart {
 	height: 300px;
 }
 
+vibration-chart {
+	display: block;
+	width: 100%;
+	height: 600px;
+}
+
 .instrument {
 	display: inline-block;
 	width: 300px;

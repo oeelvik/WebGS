@@ -67,9 +67,20 @@
 
 				</div>
 				<div class="col-md-7">
-					<pid-chart direction="roll"></pid-chart>
-					<pid-chart direction="nick"></pid-chart>
-					<pid-chart direction="yaw"></pid-chart>
+
+					<tabset>
+						<tab heading="PID">
+							<h3>Roll</h3>
+							<pid-chart direction="roll"></pid-chart>
+							<h3>Nick</h3>
+							<pid-chart direction="nick"></pid-chart>
+							<h3>Yaw</h3>
+							<pid-chart direction="yaw"></pid-chart>
+						</tab>
+
+						<tab heading="Vibration">
+							<vibration-chart></vibration-chart>
+						</tab>
 				</div>
 			</div>
 		</div>
@@ -80,6 +91,7 @@
 		
 		<script type="text/javascript" src="lib/jquery-2.1.1.min.js"></script>
 		<script type="text/javascript" src="lib/jquery.flot.js"></script>
+		<script type="text/javascript" src="lib/jquery.flot.resize.js"></script>
 		
 		<script src="lib/bootstrap/js/bootstrap.min.js"></script>
 		<script src="lib/ui-bootstrap-tpls-0.11.2.min.js"></script>
@@ -97,6 +109,7 @@
 		<script type="text/javascript" src="script/attitudeIndicator.js"></script>
 		<script type="text/javascript" src="script/receiver.js"></script>
 		<script type="text/javascript" src="script/pidChart.js"></script>
+		<script type="text/javascript" src="script/vibrationChart.js"></script>
 		<script type="text/javascript" src="script/app.js"></script>
 	</body>
 </html>

@@ -42,9 +42,9 @@ angular.module('drone.com',['socket', 'console'])
 					yaw: message[16],
 				},
 				acceleration:{
-					x: message[17],
-					y: message[18],
-					z: message[19],
+					x: (message[17] - 127) * 2,
+					y: (message[18] - 127) * 2,
+					z: (message[19] - 127) * 2,
 				}
 			},
 			output: {

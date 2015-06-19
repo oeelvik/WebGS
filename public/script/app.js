@@ -9,6 +9,7 @@ var app = angular.module('webGS',
 		'instrument.attitude-indicator',
 		'instrument.receiver',
 		'instrument.pidChart',
+		'instrument.vibrationChart',
 	]
 )
 
