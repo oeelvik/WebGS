@@ -184,6 +184,7 @@ var fromSerialParser = function () {
     return function (emitter, buffer) {
 		// Collect data
 		for (var i = 0; i < buffer.length; i++) {
+
 			if (buffer[i] === delimiter) {
 				if(data.length > 2) {
 
@@ -215,7 +216,7 @@ var fromSerialParser = function () {
 					console.error("Invalid message received from serial connection (to short):");
 					console.error(data);
 				}
-
+				
 				parityOdd = 0;
 				parityEven = 0;
 				data = new Array();

@@ -17,8 +17,8 @@
   },
   "homepage": "https://github.com/oeelvik/WebGS",
   "dependencies": {
-    "express": "4.10.2",
-    "socket.io": "1.1.0",
-    "serialport": "1.4.6"
+    "express": "^4.10.2",
+    "socket.io": "^1.1.0",
+    "serialport": "^1.4.6"
   }
 }

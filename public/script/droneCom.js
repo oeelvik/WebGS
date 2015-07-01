@@ -83,13 +83,13 @@ angular.module('drone.com',['socket', 'console'])
 
 		config[8] = mapByte(json.pid.hover.p, 'p', true);
 		config[9] = mapByte(json.pid.hover.i, 'i', true);
-		config[10] = json.pid.hover.d;
+		config[10] = mapByte(json.pid.hover.d, 'd', true);
 		config[11] = mapByte(json.pid.acro.p, 'p', true);
 		config[12] = mapByte(json.pid.acro.i, 'i', true);
-		config[13] = json.pid.acro.d;
+		config[13] = mapByte(json.pid.acro.d, 'd', true);
 		config[14] = mapByte(json.pid.yaw.p, 'p', true);
 		config[15] = mapByte(json.pid.yaw.i, 'i', true);
-		config[16] = json.pid.yaw.d;
+		config[16] = mapByte(json.pid.yaw.d, 'd', true);
 
 		config[17] = 
 			((json.receiver.throttle.rev)? Math.pow(2, 0) : 0) |
@@ -199,17 +199,17 @@ angular.module('drone.com',['socket', 'console'])
 				"hover": {
 					"p": mapByte(config[8], 'p'),
 					"i": mapByte(config[9], 'i'),
-					"d": config[10] 
+					"d": mapByte(config[10], 'd') 
 				}, 
 				"acro": { 
 					"p": mapByte(config[11], 'p'),
 					"i": mapByte(config[12], 'i'),
-					"d": config[13] 
+					"d": mapByte(config[13], 'd') 
 				}, 
 				"yaw": { 
 					"p": mapByte(config[14], 'p'),
 					"i": mapByte(config[15], 'i'),
-					"d": config[16] 
+					"d": mapByte(config[16], 'd') 
 				}
 			},
 
@@ -245,19 +245,22 @@ angular.module('drone.com',['socket', 'console'])
 
 		switch(type) {
 			case 'p':
-				drone_max = 200;
 				webgs_max = 10;
+				drone_max = 200;
 				break;
 			case 'i':
+				webgs_max = 10;
 				drone_max = 200;
-				webgs_max = 0.1;
+				break;
+			case 'd':
+				webgs_max = 10;
+				drone_max = 200;
 				break;
 			case 'accelWeight':
-				drone_max = 200;
-				webgs_max = 0.2;
+				webgs_max = 0.1;
+				drone_max = 250;
 				break;
 			case 'trim':
-				drone_max = 254;
 				webgs_min = -127;
 				webgs_max = 127;
 				break;
